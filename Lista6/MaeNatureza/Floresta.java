@@ -96,8 +96,7 @@ public class Floresta {
             System.out.println("Especie: " + plantas[i].getEspecie());
 
             if (plantas[i] instanceof Arvore) {
-                Arvore arvore = (Arvore) plantas[i];
-                if (arvore.isFrutifera()) {
+                if (((Arvore) plantas[i]).isFrutifera()) {
                     System.out.println("Arvore eh frutifera");
                 } else {
                     System.out.println("Arvore nao eh frutifera");
@@ -105,13 +104,11 @@ public class Floresta {
             }
 
             if (plantas[i] instanceof Flor) {
-                Flor flor = (Flor) plantas[i];
-                System.out.println("Cor: " + flor.getCor());
+                System.out.println("Cor: " + ((Flor) plantas[i]).getCor());
             }
 
             if (plantas[i] instanceof Carnivora) {
-                Carnivora carnivora = (Carnivora) plantas[i];
-                if (carnivora.isVenenosa()) {
+                if (((Carnivora) plantas[i]).isVenenosa()) {
                     System.out.println("Carnivora eh venenosa");
                 } else {
                     System.out.println("Carnivora nao eh venenosa");
