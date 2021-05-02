@@ -1,6 +1,67 @@
+import javax.swing.JOptionPane;
+
 public class Main {
     public static void main(String[] args) {
-        Midia[] midias = cadastrarFilmes();
+        Midia[] midias = new Midia[30];
+        System.arraycopy(cadastrarFilmes(), 0, midias, 0, 10);
+        System.arraycopy(cadastrarLivros(), 0, midias, 10, 10);
+        System.arraycopy(cadastrarJogos(), 0, midias, 20, 10);
+
+        exibirMenu(midias);
+    }
+
+    public static void exibirMenu(Midia[] midias) {
+        int menu = 0;
+
+        while (menu != 9) {
+            menu = Integer.parseInt(JOptionPane.showInputDialog(
+                "Escolha uma Opcao:\n" +
+                "1 - Alugar Midia\n" +
+                "2 - Devolver Midia\n" +
+                "3 - Verificar valor de pagamento\n" +
+                "9 - Sair"
+            ));
+
+            switch (menu) {
+                case 1 -> {
+                    alugarMidia(midias);
+                }
+                case 9 -> {}
+                default -> {
+                    JOptionPane.showMessageDialog(null, "Opcao invalida!");
+                }
+            }
+        }
+    }
+
+    public static void alugarMidia(Midia[] midias) {
+        int menu = Integer.parseInt(JOptionPane.showInputDialog(
+            "Escolha uma opcao:\n" +
+            "1 - Alugar Filme\n" +
+            "2 - Alugar Livro\n" +
+            "1 - Alugar Jogo"
+        ));
+
+        switch (menu) {
+            case 1 -> {
+                int codigo = Integer.parseInt(JOptionPane.showInputDialog(
+                    exibirFilmes(midias) + "\nEscolha um codigo:"
+                ));
+            }
+        }
+    }
+
+    public static String exibirFilmes(Midia[] midias) {
+        String mensagem = "";
+        for (int i = 0; i < 10; i++) {
+            Filme filme = ((Filme) midias[i]);
+            mensagem += filme.getCodigo() + ": " + filme.getTitulo() + " - "
+                + filme.getTipo() + " - " + filme.getGenero() + " - "
+                + "R$ " + filme.getValor() + " - " + filme.getClassificacao() + " - "
+                + filme.getDuracao() + " minutos\n\n";
+        }
+
+        return mensagem;
     }
 
     public static Filme[] cadastrarFilmes() {
@@ -46,5 +107,15 @@ public class Main {
         jogos[8] = new Jogo(9, "Futebol", "Blu-ray", "Esporte", 5.0, "PlayStation 5");
         jogos[9] = new Jogo(10, "Zelda", "Digital", "RPG", 5.0, "Nintendo Swift");
         return jogos;
+    }
+
+    public static Cliente[] cadastrarCliente() {
+        Cliente[] clientes = new Cliente[10];
+        clientes[0] = new Cliente(1, "Andre Moura", 30);
+        clientes[1] = new Cliente(2, "Fulano", 99);
+        clientes[2] = new Cliente(3, "Ciclano", 25);
+        clientes[3] = new Cliente(4, "Beltrano", 21);
+        clientes[4] = new Cliente(5, "Maria", 30);
+        return clientes;
     }
 }
