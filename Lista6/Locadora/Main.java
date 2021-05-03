@@ -1,6 +1,27 @@
+import javax.swing.JOptionPane;
+
 public class Main {
     public static void main(String[] args) {
-        Midia[] midias = cadastrarFilmes();
+        System.setProperty("file.encoding", "UTF-8");
+        Midia[] midias = new Midia[30];
+        System.arraycopy(cadastrarFilmes(), 0, midias, 0, 10);
+        System.arraycopy(cadastrarLivros(), 0, midias, 10, 10);
+        System.arraycopy(cadastrarJogos(), 0, midias, 20, 10);
+
+        /* for (int i = 0; i < midias.length; i++) {
+            System.out.println(midias[i].getTitulo());
+        } */
+
+        exibirMenu();
+    }
+
+    public static void exibirMenu() {
+        JOptionPane.showInputDialog(
+            "Escolha uma opção:\n"
+            + "1 - Alugar filme\n"
+            + "2 - Alugar Livro\n"
+            + "3 - Alugar Jogo\n"
+        );
     }
 
     public static Filme[] cadastrarFilmes() {
