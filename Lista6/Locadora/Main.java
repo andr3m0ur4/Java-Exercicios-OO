@@ -6,35 +6,61 @@ public class Main {
         System.arraycopy(cadastrarFilmes(), 0, midias, 0, 10);
         System.arraycopy(cadastrarLivros(), 0, midias, 10, 10);
         System.arraycopy(cadastrarJogos(), 0, midias, 20, 10);
+        Cliente[] clientes = cadastrarClientes();
 
-        exibirMenu(midias);
+        exibirMenu(midias, clientes);
     }
 
-    public static void exibirMenu(Midia[] midias) {
-        int menu = 0;
+    public static void exibirMenu(Midia[] midias, Cliente[] clientes) {
+        Cliente cliente = escolherCliente(clientes);
 
-        while (menu != 9) {
-            menu = Integer.parseInt(JOptionPane.showInputDialog(
-                "Escolha uma Opcao:\n" +
-                "1 - Alugar Midia\n" +
-                "2 - Devolver Midia\n" +
-                "3 - Verificar valor de pagamento\n" +
-                "9 - Sair"
-            ));
+        if (cliente != null) {
+            int menu = 0;
 
-            switch (menu) {
-                case 1 -> {
-                    alugarMidia(midias);
-                }
-                case 9 -> {}
-                default -> {
-                    JOptionPane.showMessageDialog(null, "Opcao invalida!");
+            while (menu != 9) {
+                menu = Integer.parseInt(JOptionPane.showInputDialog(
+                    "Escolha uma Opcao:\n" +
+                    "1 - Alugar Midia\n" +
+                    "2 - Devolver Midia\n" +
+                    "3 - Verificar valor de pagamento\n" +
+                    "9 - Sair"
+                ));
+
+                switch (menu) {
+                    case 1 -> {
+                        alugarMidia(midias, cliente);
+                    }
+                    case 9 -> {}
+                    default -> {
+                        JOptionPane.showMessageDialog(null, "Opcao invalida!");
+                    }
                 }
             }
         }
     }
 
-    public static void alugarMidia(Midia[] midias) {
+    public static Cliente escolherCliente(Cliente[] clientes) {
+        int op = 1;
+
+        while (op != 0) {
+            op = Integer.parseInt(JOptionPane.showInputDialog(
+                exibirClientes(clientes) +
+                "0 - Sair\n\n" +
+                "Escolha o codigo do usuario"
+            ));
+
+            if (op == 0) break;
+
+            if (clientes[op - 1] == null) {
+                JOptionPane.showMessageDialog(null, "Codigo invalido");
+                continue;
+            }
+            return clientes[op - 1];
+        }
+        return null;
+    }
+
+    public static void alugarMidia(Midia[] midias, Cliente cliente) {
         int menu = Integer.parseInt(JOptionPane.showInputDialog(
             "Escolha uma opcao:\n" +
             "1 - Alugar Filme\n" +
@@ -47,6 +73,10 @@ public class Main {
                 int codigo = Integer.parseInt(JOptionPane.showInputDialog(
                     exibirFilmes(midias) + "\nEscolha um codigo:"
                 ));
+
+                Aluguel aluguel = new Aluguel(cliente);
+                if (midias[codigo - 1] != null) {
+                }
             }
         }
     }
@@ -61,6 +91,40 @@ public class Main {
                 + filme.getDuracao() + " minutos\n\n";
         }
 
+        return mensagem;
+    }
+
+    public static String exibirLivros(Midia[] midias) {
+        String mensagem = "";
+        for (int i = 0; i < 10; i++) {
+            Livro livro = ((Livro) midias[i]);
+            mensagem += livro.getCodigo() + ": " + livro.getTitulo() + " - "
+                + livro.getTipo() + " - " + livro.getGenero() + " - "
+                + "R$ " + livro.getValor() + " - " + livro.getAutor() + " - "
+                + livro.getEditora() + " - " + livro.getEdicao() + " edicao\n\n";
+        }
+
+        return mensagem;
+    }
+
+    public static String exibirJogos(Midia[] midias) {
+        String mensagem = "";
+        for (int i = 0; i < 10; i++) {
+            Jogo jogo = ((Jogo) midias[i]);
+            mensagem += jogo.getCodigo() + ": " + jogo.getTitulo() + " - "
+                + jogo.getTipo() + " - " + jogo.getGenero() + " - "
+                + "R$ " + jogo.getValor() + " - " + jogo.getConsole() + " edicao\n\n";
+        }
+
+        return mensagem;
+    }
+
+    public static String exibirClientes(Cliente[] clientes) {
+        String mensagem = "";
+        for (int i = 0; i < 5; i++) {
+            mensagem += "Cod: " + clientes[i].getCodigo() + " - " +
+                clientes[i].getNome() + " - " + clientes[i].getIdade() + " anos\n\n";
+        }
         return mensagem;
     }
 
@@ -109,7 +173,7 @@ public class Main {
         return jogos;
     }
 
-    public static Cliente[] cadastrarCliente() {
+    public static Cliente[] cadastrarClientes() {
         Cliente[] clientes = new Cliente[10];
         clientes[0] = new Cliente(1, "Andre Moura", 30);
         clientes[1] = new Cliente(2, "Fulano", 99);

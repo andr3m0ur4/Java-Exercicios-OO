@@ -3,9 +3,13 @@ public class Aluguel {
     private Cliente cliente;
     private int quantidade;
 
-    public Aluguel(Midia midia, Cliente cliente) {
-        this.midias[quantidade] = midia;
+    public Aluguel(Cliente cliente) {
         this.cliente = cliente;
+    }
+    
+    public void alugarMidia(Midia midia, Cliente cliente) {
+        this.midias[quantidade] = midia;
         this.quantidade++;
+
     }
 }
