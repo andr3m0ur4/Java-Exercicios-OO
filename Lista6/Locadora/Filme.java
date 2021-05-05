@@ -2,20 +2,23 @@ public class Filme extends Midia {
     private String classificacao;
     private int duracao;
 
-    public Filme(
-        int codigo, String titulo, String tipo, String genero, double valor,
-        String classificacao, int duracao
-    ) {
-        super(codigo, titulo, tipo, genero, valor);
-        this.classificacao = classificacao;
-        this.duracao = duracao;
+    public Filme() {
+        super();
     }
 
     public String getClassificacao() {
         return this.classificacao;
     }
 
+    public void setClassificacao(String classificacao) {
+        this.classificacao = classificacao;
+    }
+
     public int getDuracao() {
         return this.duracao;
+    }
+
+    public void setDuracao(int duracao) {
+        this.duracao = duracao;
     }
 }

@@ -3,25 +3,31 @@ public class Livro extends Midia {
     private String editora;
     private int edicao;
 
-    public Livro(
-        int codigo, String titulo, String tipo, String genero, double valor,
-        String autor, String editora, int edicao
-    ) {
-        super(codigo, titulo, tipo, genero, valor);
-        this.autor = autor;
-        this.editora = editora;
-        this.edicao = edicao;
+    public Livro() {
+        super();
     }
 
     public String getAutor() {
         return this.autor;
     }
 
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
     public String getEditora() {
         return this.editora;
     }
 
+    public void setEditora(String editora) {
+        this.editora = editora;
+    }
+
     public int getEdicao() {
         return this.edicao;
+    }
+
+    public void setEdicao(int edicao) {
+        this.edicao = edicao;
     }
 }

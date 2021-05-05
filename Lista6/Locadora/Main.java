@@ -3,16 +3,18 @@ import javax.swing.JOptionPane;
 public class Main {
     public static void main(String[] args) {
         Midia[] midias = new Midia[30];
-        System.arraycopy(cadastrarFilmes(), 0, midias, 0, 10);
-        System.arraycopy(cadastrarLivros(), 0, midias, 10, 10);
-        System.arraycopy(cadastrarJogos(), 0, midias, 20, 10);
+        midias = cadastrarFilmes(midias);
+        midias = cadastrarLivros(midias);
+        midias = cadastrarJogos(midias);
+
         Cliente[] clientes = cadastrarClientes();
 
         exibirMenu(midias, clientes);
     }
 
     public static void exibirMenu(Midia[] midias, Cliente[] clientes) {
-        Cliente cliente = escolherCliente(clientes);
+        Cliente cliente = definirCliente(clientes);
+        Aluguel aluguel = new Aluguel(cliente);
 
         if (cliente != null) {
             int menu = 0;
@@ -28,7 +30,10 @@ public class Main {
 
                 switch (menu) {
                     case 1 -> {
-                        alugarMidia(midias, cliente);
+                        alugarMidia(aluguel, midias);
+                    }
+                    case 3 -> {
+                        exibirValorDePagamento(aluguel);
                     }
                     case 9 -> {}
                     default -> {
@@ -39,13 +44,13 @@ public class Main {
         }
     }
 
-    public static Cliente escolherCliente(Cliente[] clientes) {
+    public static Cliente definirCliente(Cliente[] clientes) {
         int op = 1;
 
         while (op != 0) {
             op = Integer.parseInt(JOptionPane.showInputDialog(
                 exibirClientes(clientes) +
-                "0 - Sair\n\n" +
+                " Cod: 0 - Sair\n\n" +
                 "Escolha o codigo do usuario"
             ));
 
@@ -60,12 +65,12 @@ public class Main {
         return null;
     }
 
-    public static void alugarMidia(Midia[] midias, Cliente cliente) {
+    public static void alugarMidia(Aluguel aluguel, Midia[] midias) {
         int menu = Integer.parseInt(JOptionPane.showInputDialog(
             "Escolha uma opcao:\n" +
             "1 - Alugar Filme\n" +
             "2 - Alugar Livro\n" +
-            "1 - Alugar Jogo"
+            "3 - Alugar Jogo"
         ));
 
         switch (menu) {
@@ -74,11 +79,39 @@ public class Main {
                     exibirFilmes(midias) + "\nEscolha um codigo:"
                 ));
 
-                Aluguel aluguel = new Aluguel(cliente);
                 if (midias[codigo - 1] != null) {
+                    aluguel.alugarMidia(midias[codigo - 1]);
+                }
+            }
+
+            case 2 -> {
+                int codigo = Integer.parseInt(JOptionPane.showInputDialog(
+                    exibirLivros(midias) + "\nEscolha um codigo:"
+                ));
+
+                if (midias[codigo + 9] != null) {
+                    aluguel.alugarMidia(midias[codigo + 9]);
+                }
+            }
+
+            case 3 -> {
+                int codigo = Integer.parseInt(JOptionPane.showInputDialog(
+                    exibirJogos(midias) + "\nEscolha um codigo:"
+                ));
+
+                if (midias[codigo + 19] != null) {
+                    aluguel.alugarMidia(midias[codigo + 19]);
                 }
             }
         }
+    }
+
+    public static void exibirValorDePagamento(Aluguel aluguel) {
+        JOptionPane.showMessageDialog(null, aluguel.mostrarMidiasAlugadas());
+        JOptionPane.showMessageDialog(
+            null, "Cliente: " + aluguel.getNomeCliente() +
+            "\nValor Total: R$ " + aluguel.exibirValorTotal()
+        );
     }
 
     public static String exibirFilmes(Midia[] midias) {
@@ -96,7 +129,7 @@ public class Main {
 
     public static String exibirLivros(Midia[] midias) {
         String mensagem = "";
-        for (int i = 0; i < 10; i++) {
+        for (int i = 10; i < 20; i++) {
             Livro livro = ((Livro) midias[i]);
             mensagem += livro.getCodigo() + ": " + livro.getTitulo() + " - "
                 + livro.getTipo() + " - " + livro.getGenero() + " - "
@@ -109,7 +142,7 @@ public class Main {
 
     public static String exibirJogos(Midia[] midias) {
         String mensagem = "";
-        for (int i = 0; i < 10; i++) {
+        for (int i = 20; i < 30; i++) {
             Jogo jogo = ((Jogo) midias[i]);
             mensagem += jogo.getCodigo() + ": " + jogo.getTitulo() + " - "
                 + jogo.getTipo() + " - " + jogo.getGenero() + " - "
@@ -128,58 +161,113 @@ public class Main {
         return mensagem;
     }
 
-    public static Filme[] cadastrarFilmes() {
+    public static Midia[] cadastrarFilmes(Midia[] midias) {
+        String[][] filmesArray = {
+            { "1", "Homem de Ferro", "DVD", "Acao", "4.0", "Maiores de 12 anos", "160" },
+            { "2", "Corra que a policia vem ai", "DVD", "Comedia", "3.0", "Maiores de 14 anos", "100" },
+            { "3", "Os outros", "DVD", "Suspense", "3.0", "Maiores de 14 anos", "90" },
+            { "4", "Jurassic Park", "Blu-ray", "Aventura", "4.0", "Maiores de 12 anos", "120" },
+            { "5", "Vingadores", "Blu-ray", "Acao", "5.0", "Maiores de 12 anos", "160" },
+            { "6", "Invocacao do mal", "DVD", "Terror", "3.0", "Maiores de 16 anos", "100" },
+            { "7", "A culpa eh das estrelas", "DVD", "Romance", "3.0", "Livre", "90" },
+            { "8", "Guardiao das Galaxias", "Blu-ray", "Acao", "4.0", "Maiores de 12 anos", "120" },
+            { "9", "Senhor dos Aneis", "Blu-ray", "Aventura", "4.0", "Maiores de 12 anos", "160" },
+            { "10", "Matrix", "DVD", "Acao", "3.0", "Maiores de 12 anos", "120" }
+        };
+
         Filme[] filmes = new Filme[10];
-        filmes[0] = new Filme(1, "Homem de Ferro", "DVD", "Acao", 4.0, "Maiores de 12 anos", 160);
-        filmes[1] = new Filme(2, "Corra que a policia vem ai", "DVD", "Comedia", 3.0, "Maiores de 14 anos", 100);
-        filmes[2] = new Filme(3, "Os outros", "DVD", "Suspense", 3.0, "Maiores de 14 anos", 90);
-        filmes[3] = new Filme(4, "Jurassic Park", "Blu-ray", "Aventura", 4.0, "Maiores de 12 anos", 120);
-        filmes[4] = new Filme(5, "Vingadores", "Blu-ray", "Acao", 5.0, "Maiores de 12 anos", 160);
-        filmes[5] = new Filme(6, "Invocacao do mal", "DVD", "Terror", 3.0, "Maiores de 16 anos", 100);
-        filmes[6] = new Filme(7, "A culpa eh das estrelas", "DVD", "Romance", 3.0, "Livre", 90);
-        filmes[7] = new Filme(8, "Guardiao das Galaxias", "Blu-ray", "Acao", 4.0, "Maiores de 12 anos", 120);
-        filmes[8] = new Filme(9, "Senhor dos Aneis", "Blu-ray", "Aventura", 4.0, "Maiores de 12 anos", 160);
-        filmes[9] = new Filme(10, "Matrix", "DVD", "Acao", 3.0, "Maiores de 12 anos", 120);
-        return filmes;
+        for (int i = 0; i < 10; i++) {
+            filmes[i] = new Filme();
+            filmes[i].setCodigo(Integer.parseInt(filmesArray[i][0]));
+            filmes[i].setTitulo(filmesArray[i][1]);
+            filmes[i].setTipo(filmesArray[i][2]);
+            filmes[i].setGenero(filmesArray[i][3]);
+            filmes[i].setValor(Double.parseDouble(filmesArray[i][4]));
+            filmes[i].setClassificacao(filmesArray[i][5]);
+            filmes[i].setDuracao(Integer.parseInt(filmesArray[i][6]));
+            midias[i] = filmes[i];
+        }
+
+        return midias;
     }
 
-    public static Livro[] cadastrarLivros() {
+    public static Midia[] cadastrarLivros(Midia[] midias) {
+        String[][] livrosArray = {
+            { "1", "Harry Potter", "Brochura", "Aventura", "10.0", "J. K. Rowling", "Alguma editora", "3"} ,
+            { "2", "O Senhor dos Aneis", "Brochura", "Aventura", "10.0", "J. R. R. Tolkien", "Outra editora", "7"} ,
+            { "3", "As Cronicas de Narnia", "Comum", "Fantasia", "5.0", "C. S. Lewis", "Uma editora", "2"} ,
+            { "4", "Crepusculo", "Comum", "Romance", "8.0", "Stephenie Meyer", "Editora Vampiros", "4"} ,
+            { "5", "Alice no Pais das Maravilhas", "Comum", "Infantil", "4.0", "Charles", "Editora Classic", "11"} ,
+            { "6", "O Pequeno Principe", "Brochura", "Aventura", "5.0", "Antoine", "Amazon", "12"} ,
+            { "7", "Meu pe de laranja lima", "Comum", "Romance", "4.0", "Jose Mauro", "Editora brasileira", "4"} ,
+            { "8", "Branca de Neve", "Brochura", "Infantil", "4.0", "Wihelm Grimm", "Alguma editora", "4"} ,
+            { "9", "Chapelzinho vermelho", "Brochura", "Infantil", "7.0", "Charles Perrault", "Alguma editora", "5"} ,
+            { "10", "O Gato de Botas", "Comum", "Aventura", "7.0", "Charles Perrault", "Mail uma editora", "7" }
+        };
+
         Livro[] livros = new Livro[10];
-        livros[0] = new Livro(1, "Harry Potter", "Brochura", "Aventura", 10.0, "J. K. Rowling", "Alguma editora", 3);
-        livros[1] = new Livro(2, "O Senhor dos Aneis", "Brochura", "Aventura", 10.0, "J. R. R. Tolkien", "Outra editora", 7);
-        livros[2] = new Livro(3, "As Cronicas de Narnia", "Comum", "Fantasia", 5.0, "C. S. Lewis", "Uma editora", 2);
-        livros[3] = new Livro(4, "Crepusculo", "Comum", "Romance", 8.0, "Stephenie Meyer", "Editora Vampiros", 4);
-        livros[4] = new Livro(5, "Alice no Pais das Maravilhas", "Comum", "Infantil", 4.0, "Charles", "Editora Classic", 11);
-        livros[5] = new Livro(6, "O Pequeno Principe", "Brochura", "Aventura", 5.0, "Antoine", "Amazon", 12);
-        livros[6] = new Livro(7, "Meu pe de laranja lima", "Comum", "Romance", 4.0, "Jose Mauro", "Editora brasileira", 4);
-        livros[7] = new Livro(8, "Branca de Neve", "Brochura", "Infantil", 4.0, "Wihelm Grimm", "Alguma editora", 4);
-        livros[8] = new Livro(9, "Chapelzinho vermelho", "Brochura", "Infantil", 7.0, "Charles Perrault", "Alguma editora", 5);
-        livros[9] = new Livro(10, "O Gato de Botas", "Comum", "Aventura", 7.0, "Charles Perrault", "Mail uma editora", 7);
-        return livros;
+        for (int i = 0; i < 10; i++) {
+            livros[i] = new Livro();
+            livros[i].setCodigo(Integer.parseInt(livrosArray[i][0]));
+            livros[i].setTitulo(livrosArray[i][1]);
+            livros[i].setTipo(livrosArray[i][2]);
+            livros[i].setGenero(livrosArray[i][3]);
+            livros[i].setValor(Double.parseDouble(livrosArray[i][4]));
+            livros[i].setAutor(livrosArray[i][5]);
+            livros[i].setEditora(livrosArray[i][6]);
+            livros[i].setEdicao(Integer.parseInt(livrosArray[i][7]));
+            midias[i + 10] = livros[i];
+        }
+
+        return midias;
     }
 
-    public static Jogo[] cadastrarJogos() {
+    public static Midia[] cadastrarJogos(Midia[] midias) {
+        String[][] jogosArray = {
+            { "1", "God of War", "DVD", "Aventura", "4.0", "PlayStation 3" },
+            { "2", "Tomb Raider", "CD", "Aventura", "1.0", "PlayStation 1" },
+            { "3", "Super Mario World", "Digital", "Aventura", "1.0", "Super Nintendo" },
+            { "4", "GTA 5", "Blu-Ray", "Acao", "6.0", "PlayStation 4" },
+            { "5", "Sonic", "Cartucho", "Aventura", "1.0", "Mega Drive" },
+            { "6", "Fortnite", "Digital", "FPS", "2.0", "X box One" },
+            { "7", "Pokemon Red", "Cartucho", "RPG", "2.0", "Game Boy Advance" },
+            { "8", "Mario Kart", "Digital", "Corrida", "4.0", "Nintendo Wii" },
+            { "9", "Futebol", "Blu-ray", "Esporte", "5.0", "PlayStation 5" },
+            { "10", "Zelda", "Digital", "RPG", "5.0", "Nintendo Swift" }
+        };
+
         Jogo[] jogos = new Jogo[10];
-        jogos[0] = new Jogo(1, "God of War", "DVD", "Aventura", 4.0, "PlayStation 3");
-        jogos[1] = new Jogo(2, "Tomb Raider", "CD", "Aventura", 1.0, "PlayStation 1");
-        jogos[2] = new Jogo(3, "Super Mario World", "Digital", "Aventura", 1.0, "Super Nintendo");
-        jogos[3] = new Jogo(4, "GTA 5", "Blu-Ray", "Acao", 6.0, "PlayStation 4");
-        jogos[4] = new Jogo(5, "Sonic", "Cartucho", "Aventura", 1.0, "Mega Drive");
-        jogos[5] = new Jogo(6, "Fortnite", "Digital", "FPS", 2.0, "X box One");
-        jogos[6] = new Jogo(7, "Pokemon Red", "Cartucho", "RPG", 2.0, "Game Boy Advance");
-        jogos[7] = new Jogo(8, "Mario Kart", "Digital", "Corrida", 4.0, "Nintendo Wii");
-        jogos[8] = new Jogo(9, "Futebol", "Blu-ray", "Esporte", 5.0, "PlayStation 5");
-        jogos[9] = new Jogo(10, "Zelda", "Digital", "RPG", 5.0, "Nintendo Swift");
-        return jogos;
+        for (int i = 0; i < 10; i++) {
+            jogos[i] = new Jogo();
+            jogos[i].setCodigo(Integer.parseInt(jogosArray[i][0]));
+            jogos[i].setTitulo(jogosArray[i][1]);
+            jogos[i].setTipo(jogosArray[i][2]);
+            jogos[i].setGenero(jogosArray[i][3]);
+            jogos[i].setValor(Double.parseDouble(jogosArray[i][4]));
+            jogos[i].setConsole(jogosArray[i][5]);
+            midias[i + 20] = jogos[i];
+        }
+
+        return midias;
     }
 
     public static Cliente[] cadastrarClientes() {
+        String[][] clientesArray = {
+            { "1", "Andre Moura", "30" },
+            { "2", "Fulano", "99" },
+            { "3", "Ciclano", "25" },
+            { "4", "Beltrano", "21" },
+            { "5", "Maria", "30" }
+        };
+
         Cliente[] clientes = new Cliente[10];
-        clientes[0] = new Cliente(1, "Andre Moura", 30);
-        clientes[1] = new Cliente(2, "Fulano", 99);
-        clientes[2] = new Cliente(3, "Ciclano", 25);
-        clientes[3] = new Cliente(4, "Beltrano", 21);
-        clientes[4] = new Cliente(5, "Maria", 30);
+        for (int i = 0; i < 5; i++) {
+            clientes[i] = new Cliente();
+            clientes[i].setCodigo(Integer.parseInt(clientesArray[i][0]));
+            clientes[i].setNome(clientesArray[i][1]);
+            clientes[i].setIdade(Integer.parseInt(clientesArray[i][2]));
+        }
+
         return clientes;
     }
 }
