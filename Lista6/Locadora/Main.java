@@ -32,6 +32,9 @@ public class Main {
                     case 1 -> {
                         alugarMidia(aluguel, midias);
                     }
+                    case 2 -> {
+                        devolverMidia(aluguel, midias);
+                    }
                     case 3 -> {
                         exibirValorDePagamento(aluguel);
                     }
@@ -89,8 +92,8 @@ public class Main {
                     exibirLivros(midias) + "\nEscolha um codigo:"
                 ));
 
-                if (midias[codigo + 9] != null) {
-                    aluguel.alugarMidia(midias[codigo + 9]);
+                if (midias[codigo - 1] != null) {
+                    aluguel.alugarMidia(midias[codigo - 1]);
                 }
             }
 
@@ -99,11 +102,19 @@ public class Main {
                     exibirJogos(midias) + "\nEscolha um codigo:"
                 ));
 
-                if (midias[codigo + 19] != null) {
-                    aluguel.alugarMidia(midias[codigo + 19]);
+                if (midias[codigo - 1] != null) {
+                    aluguel.alugarMidia(midias[codigo - 1]);
                 }
             }
         }
+    }
+
+    public static void devolverMidia(Aluguel aluguel, Midia[] midias) {
+        int codigo = Integer.parseInt(
+            JOptionPane.showInputDialog(aluguel.mostrarMidiasAlugadas() + "\nDigite um codigo")
+        );
+
+        aluguel.devolverMidia(codigo);
     }
 
     public static void exibirValorDePagamento(Aluguel aluguel) {
@@ -193,16 +204,16 @@ public class Main {
 
     public static Midia[] cadastrarLivros(Midia[] midias) {
         String[][] livrosArray = {
-            { "1", "Harry Potter", "Brochura", "Aventura", "10.0", "J. K. Rowling", "Alguma editora", "3"} ,
-            { "2", "O Senhor dos Aneis", "Brochura", "Aventura", "10.0", "J. R. R. Tolkien", "Outra editora", "7"} ,
-            { "3", "As Cronicas de Narnia", "Comum", "Fantasia", "5.0", "C. S. Lewis", "Uma editora", "2"} ,
-            { "4", "Crepusculo", "Comum", "Romance", "8.0", "Stephenie Meyer", "Editora Vampiros", "4"} ,
-            { "5", "Alice no Pais das Maravilhas", "Comum", "Infantil", "4.0", "Charles", "Editora Classic", "11"} ,
-            { "6", "O Pequeno Principe", "Brochura", "Aventura", "5.0", "Antoine", "Amazon", "12"} ,
-            { "7", "Meu pe de laranja lima", "Comum", "Romance", "4.0", "Jose Mauro", "Editora brasileira", "4"} ,
-            { "8", "Branca de Neve", "Brochura", "Infantil", "4.0", "Wihelm Grimm", "Alguma editora", "4"} ,
-            { "9", "Chapelzinho vermelho", "Brochura", "Infantil", "7.0", "Charles Perrault", "Alguma editora", "5"} ,
-            { "10", "O Gato de Botas", "Comum", "Aventura", "7.0", "Charles Perrault", "Mail uma editora", "7" }
+            { "11", "Harry Potter", "Brochura", "Aventura", "10.0", "J. K. Rowling", "Alguma editora", "3"} ,
+            { "12", "O Senhor dos Aneis", "Brochura", "Aventura", "10.0", "J. R. R. Tolkien", "Outra editora", "7"} ,
+            { "13", "As Cronicas de Narnia", "Comum", "Fantasia", "5.0", "C. S. Lewis", "Uma editora", "2"} ,
+            { "14", "Crepusculo", "Comum", "Romance", "8.0", "Stephenie Meyer", "Editora Vampiros", "4"} ,
+            { "15", "Alice no Pais das Maravilhas", "Comum", "Infantil", "4.0", "Charles", "Editora Classic", "11"} ,
+            { "16", "O Pequeno Principe", "Brochura", "Aventura", "5.0", "Antoine", "Amazon", "12"} ,
+            { "17", "Meu pe de laranja lima", "Comum", "Romance", "4.0", "Jose Mauro", "Editora brasileira", "4"} ,
+            { "18", "Branca de Neve", "Brochura", "Infantil", "4.0", "Wihelm Grimm", "Alguma editora", "4"} ,
+            { "19", "Chapelzinho vermelho", "Brochura", "Infantil", "7.0", "Charles Perrault", "Alguma editora", "5"} ,
+            { "20", "O Gato de Botas", "Comum", "Aventura", "7.0", "Charles Perrault", "Mail uma editora", "7" }
         };
 
         Livro[] livros = new Livro[10];
@@ -224,16 +235,16 @@ public class Main {
 
     public static Midia[] cadastrarJogos(Midia[] midias) {
         String[][] jogosArray = {
-            { "1", "God of War", "DVD", "Aventura", "4.0", "PlayStation 3" },
-            { "2", "Tomb Raider", "CD", "Aventura", "1.0", "PlayStation 1" },
-            { "3", "Super Mario World", "Digital", "Aventura", "1.0", "Super Nintendo" },
-            { "4", "GTA 5", "Blu-Ray", "Acao", "6.0", "PlayStation 4" },
-            { "5", "Sonic", "Cartucho", "Aventura", "1.0", "Mega Drive" },
-            { "6", "Fortnite", "Digital", "FPS", "2.0", "X box One" },
-            { "7", "Pokemon Red", "Cartucho", "RPG", "2.0", "Game Boy Advance" },
-            { "8", "Mario Kart", "Digital", "Corrida", "4.0", "Nintendo Wii" },
-            { "9", "Futebol", "Blu-ray", "Esporte", "5.0", "PlayStation 5" },
-            { "10", "Zelda", "Digital", "RPG", "5.0", "Nintendo Swift" }
+            { "21", "God of War", "DVD", "Aventura", "4.0", "PlayStation 3" },
+            { "22", "Tomb Raider", "CD", "Aventura", "1.0", "PlayStation 1" },
+            { "23", "Super Mario World", "Digital", "Aventura", "1.0", "Super Nintendo" },
+            { "24", "GTA 5", "Blu-Ray", "Acao", "6.0", "PlayStation 4" },
+            { "25", "Sonic", "Cartucho", "Aventura", "1.0", "Mega Drive" },
+            { "26", "Fortnite", "Digital", "FPS", "2.0", "X box One" },
+            { "27", "Pokemon Red", "Cartucho", "RPG", "2.0", "Game Boy Advance" },
+            { "28", "Mario Kart", "Digital", "Corrida", "4.0", "Nintendo Wii" },
+            { "29", "Futebol", "Blu-ray", "Esporte", "5.0", "PlayStation 5" },
+            { "30", "Zelda", "Digital", "RPG", "5.0", "Nintendo Swift" }
         };
 
         Jogo[] jogos = new Jogo[10];

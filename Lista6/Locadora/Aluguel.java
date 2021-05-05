@@ -13,29 +13,41 @@ public class Aluguel {
         this.quantidade++;
     }
 
+    public void devolverMidia(int codigo) {
+        for (int i = 0; i < this.quantidade; i++) {
+            if (midias[i] != null) {
+                if (this.midias[i].getCodigo() == codigo) {
+                    this.midias[i] = null;
+                }
+            }
+        }
+    }
+
     public String mostrarMidiasAlugadas() {
         String mensagem = "";
 
         for (int i = 0; i < this.quantidade; i++) {
-            mensagem += "Cod: " + midias[i].getCodigo();
-            mensagem += "\nTitulo: " + midias[i].getTitulo();
-            mensagem += "\nTipo: " + midias[i].getTipo();
-            mensagem += " | Genero: " + midias[i].getGenero();
-            mensagem += " | Valor: R$ " + midias[i].getValor();
-            
-            if (midias[i] instanceof Filme) {
-                mensagem += "\nClassificacao: " + ((Filme) midias[i]).getClassificacao();
-                mensagem += " | Duracao: " + ((Filme) midias[i]).getDuracao() + " minutos";
+            if (midias[i] != null) {
+                mensagem += "Cod: " + midias[i].getCodigo();
+                mensagem += "\nTitulo: " + midias[i].getTitulo();
+                mensagem += "\nTipo: " + midias[i].getTipo();
+                mensagem += " | Genero: " + midias[i].getGenero();
+                mensagem += " | Valor: R$ " + midias[i].getValor();
+                
+                if (midias[i] instanceof Filme) {
+                    mensagem += "\nClassificacao: " + ((Filme) midias[i]).getClassificacao();
+                    mensagem += " | Duracao: " + ((Filme) midias[i]).getDuracao() + " minutos";
+                }
+                if (midias[i] instanceof Livro) {
+                    mensagem += "\nAutor: " + ((Livro) midias[i]).getAutor();
+                    mensagem += " | Editora: " + ((Livro) midias[i]).getEditora();
+                    mensagem += " | Edicao: " + ((Livro) midias[i]).getEdicao() + " edicao";
+                }
+                if (midias[i] instanceof Jogo) {
+                    mensagem += "\nConsole: " + ((Jogo) midias[i]).getConsole();
+                }
+                mensagem += "\n\n";
             }
-            if (midias[i] instanceof Livro) {
-                mensagem += "\nAutor: " + ((Livro) midias[i]).getAutor();
-                mensagem += " | Editora: " + ((Livro) midias[i]).getEditora();
-                mensagem += " | Edicao: " + ((Livro) midias[i]).getEdicao() + " edicao";
-            }
-            if (midias[i] instanceof Jogo) {
-                mensagem += "\nConsole: " + ((Jogo) midias[i]).getConsole();
-            }
-            mensagem += "\n\n";
         }
         
         return mensagem;
@@ -44,7 +56,7 @@ public class Aluguel {
     public double exibirValorTotal() {
         double total = 0;
         for (int i = 0; i < this.quantidade; i++) {
-            total += midias[i].getValor();
+            if (midias[i] != null) total += midias[i].getValor();
         }
         return total;
     }
