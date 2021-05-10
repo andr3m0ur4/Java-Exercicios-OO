@@ -7,7 +7,7 @@ public class Pedido {
     }
 
     public void inserirProduto(Produto produto) {
-        if (produto != null && quantidade < 100) {
+        if (produto != null) {
             this.produtos[quantidade] = produto;
             quantidade++;
         }
@@ -15,6 +15,10 @@ public class Pedido {
 
     public int getQuantidade() {
         return this.quantidade;
+    }
+
+    public boolean isCheio() {
+        return this.quantidade == 100;
     }
 
     public double calcularValorTotal() {

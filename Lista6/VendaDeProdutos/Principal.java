@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Principal {
@@ -6,9 +7,9 @@ public class Principal {
         Scanner entrada = new Scanner(System.in);
         char op = 's';
 
-        System.out.println("Sistema de Vendas de Produtos");
-
+        
         while (op == 's') {
+            System.out.println("Sistema de Vendas de Produtos");
             System.out.println("O que voce gostaria de comprar?");
             System.out.println("1 - Frios R$ 10,00");
             System.out.println("2 - Paozinho R$ 1,00");
@@ -21,7 +22,12 @@ public class Principal {
                     int quantidade = entrada.nextInt();
 
                     for (int i = 0; i < quantidade; i++) {
-                        pedido.inserirProduto(new Frios());
+                        if (pedido.isCheio()) {
+                            System.out.println("O pedido ja possui 100 itens.");
+                            break;
+                        } else {
+                            pedido.inserirProduto(new Frios());
+                        }
                     }
                 }
                 case 2 -> {
@@ -29,7 +35,12 @@ public class Principal {
                     int quantidade = entrada.nextInt();
 
                     for (int i = 0; i < quantidade; i++) {
-                        pedido.inserirProduto(new Paozinho());
+                        if (pedido.isCheio()) {
+                            System.out.println("O pedido ja possui 100 itens.");
+                            break;
+                        } else {
+                            pedido.inserirProduto(new Paozinho());
+                        }
                     }
                 }
                 case 3 -> {
@@ -37,7 +48,12 @@ public class Principal {
                     int quantidade = entrada.nextInt();
 
                     for (int i = 0; i < quantidade; i++) {
-                        pedido.inserirProduto(new Doces());
+                        if (pedido.isCheio()) {
+                            System.out.println("O pedido ja possui 100 itens.");
+                            break;
+                        } else {
+                            pedido.inserirProduto(new Doces());
+                        }
                     }
                 }
                 default -> {
@@ -47,10 +63,25 @@ public class Principal {
 
             System.out.print("Deseja realizar outra compra? (S/N) ");
             op = entrada.next().toLowerCase().charAt(0);
+            limparTela();
         }
         entrada.close();
 
         //System.out.println(pedido.getQuantidade());
         System.out.println("Valor total da compra = R$ " + pedido.calcularValorTotal());
+    }
+
+    public static void limparTela() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                Runtime.getRuntime().exec("clear");
+            }
+        } catch (IOException erro) {
+            erro.printStackTrace();
+        } catch (InterruptedException erro2) {
+            erro2.printStackTrace();
+        }
     }
 }
