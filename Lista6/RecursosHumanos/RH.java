@@ -8,6 +8,56 @@ public class RH {
     static int quantidadeCandidatos;
     static int quantidadeVagas;
 
+    public static void inserir(Candidato candidato) {
+        aumentarTamanho();
+        candidatos[quantidadeCandidatos] = candidato;
+        quantidadeCandidatos++;
+    }
+
+    public static void inserir(Vaga vaga) {
+        aumentarTamanho();
+        vagas[quantidadeVagas] = vaga;
+        quantidadeVagas++;
+    }
+
+    public static Candidato getCandidato(int posicao) {
+        if (posicao >= quantidadeCandidatos) {
+            throw new IllegalArgumentException("Candidato nao existe!");
+        }
+
+        return candidatos[posicao];
+    }
+
+    public static Vaga getVaga(int posicao) {
+        if (posicao >= quantidadeVagas) {
+            throw new IllegalArgumentException("Vaga nao existe!");
+        }
+
+        return vagas[posicao];
+    }
+
+    private static void aumentarTamanho() {
+        if (quantidadeCandidatos == candidatos.length) {
+            Candidato[] novosCandidatos = new Candidato[candidatos.length + 5];
+
+            for (int i = 0; i < quantidadeCandidatos; i++) {
+                novosCandidatos[i] = candidatos[i];
+            }
+
+            candidatos = novosCandidatos;
+        }
+
+        if (quantidadeVagas == vagas.length) {
+            Vaga[] novasVagas = new Vaga[vagas.length + 5];
+
+            for (int i = 0; i < quantidadeVagas; i++) {
+                novasVagas[i] = vagas[i];
+            }
+
+            vagas = novasVagas;
+        }
+    }
+
     public static void main(String[] args) {
         int op = 0;
 
@@ -69,14 +119,12 @@ public class RH {
             case 1 -> {
                 System.out.print("Informe o tempo em meses que o candidato esta desempregado: ");
                 int tempo = entrada.nextInt();
-                candidatos[quantidadeCandidatos] = new Desempregado(nome, idade, tempo);
-                quantidadeCandidatos++;
+                inserir(new Desempregado(nome, idade, tempo));
             }
             case 2 -> {
                 System.out.print("Informe o nome da empresa onde o candidato esta atualmente: ");
                 String empresa = texto.nextLine();
-                candidatos[quantidadeCandidatos] = new Empregado(nome, idade, empresa);
-                quantidadeCandidatos++;
+                inserir(new Empregado(nome, idade, empresa));
             }
             default -> {
                 System.out.println("Opcao invalida!");
@@ -99,14 +147,12 @@ public class RH {
             case 1 -> {
                 System.out.print("Informe o tempo em meses da vaga: ");
                 int tempo = entrada.nextInt();
-                vagas[quantidadeVagas] = new Estagio(descricao, salario, tempo);
-                quantidadeVagas++;
+                inserir(new Estagio(descricao, salario, tempo));
             }
             case 2 -> {
                 System.out.print("A vaga eh temporaria? (S/N) ");
                 boolean temporario = entrada.next().toLowerCase().charAt(0) == 's';
-                vagas[quantidadeVagas] = new Contrato(descricao, salario, temporario);
-                quantidadeVagas++;
+                inserir(new Contrato(descricao, salario, temporario));
             }
             default -> {
                 System.out.println("Opcao invalida!");
