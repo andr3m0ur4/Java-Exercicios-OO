@@ -21,7 +21,7 @@ public class RH {
     }
 
     public static Candidato getCandidato(int posicao) {
-        if (posicao >= quantidadeCandidatos) {
+        if (posicao < 0 || posicao >= quantidadeCandidatos) {
             throw new IllegalArgumentException("Candidato nao existe!");
         }
 
@@ -29,7 +29,7 @@ public class RH {
     }
 
     public static Vaga getVaga(int posicao) {
-        if (posicao >= quantidadeVagas) {
+        if (posicao < 0 || posicao >= quantidadeVagas) {
             throw new IllegalArgumentException("Vaga nao existe!");
         }
 
@@ -82,8 +82,6 @@ public class RH {
                 case 3 -> {
                     if (cadastrarCandidadoXVaga()) {
                         System.out.println("Cadastrado com sucesso!\n");
-                    } else {
-                        System.out.println("Codigo invalido!\n");
                     }
                 }
                 case 4 -> {
@@ -164,22 +162,34 @@ public class RH {
     public static boolean cadastrarCandidadoXVaga() {
         System.out.println("Escolha o candidado:");
         for (int i = 0; i < quantidadeCandidatos; i++) {
-            System.out.printf("Codigo: %d - Nome: %s\n", i + 1, candidatos[i].getNome());
+            System.out.println("Codigo: " + (i + 1));
+            System.out.println(getCandidato(i).toString());
         }
         System.out.print("Informe o codigo: ");
         int candidato = entrada.nextInt() - 1;
-        if (candidatos[candidato] == null) return false;
+        try {
+            getCandidato(candidato);
+        } catch (IllegalArgumentException erro) {
+            System.out.println(erro.getMessage());
+            return false;
+        }
 
+        System.out.println("=====================================================");
         System.out.println("Escolha a vaga:");
         for (int i = 0; i < quantidadeVagas; i++) {
-            System.out.printf("Codigo: %d - Descricao: %s - Salario: R$ %.2f\n",
-                i + 1, vagas[i].getDescricao(), vagas[i].getSalario());
+            System.out.println("Codigo: " + (i + 1));
+            System.out.println(getVaga(i).toString());
         }
         System.out.print("Informe o codigo: ");
         int vaga = entrada.nextInt() - 1;
-        if (vagas[vaga] == null) return false;
+        try {
+            getVaga(vaga);
+        } catch (IllegalArgumentException erro) {
+            System.out.println(erro.getMessage());
+            return false;
+        }
 
-        vagas[vaga].cadastrarCandidato(candidatos[candidato]);
+        getVaga(vaga).cadastrarCandidato(getCandidato(candidato));
 
         return true;
     }

@@ -14,4 +14,8 @@ public class Candidato {
     public int getIdade() {
         return this.idade;
     }
+
+    public String toString() {
+        return "Nome: " + this.nome + " - Idade: " + this.idade;
+    }
 }
