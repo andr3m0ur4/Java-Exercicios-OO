@@ -9,7 +9,7 @@ public class RH {
 
     static int quantidadeCandidatos = 0, maxCandidatos = 100;
     static int quantidadeVagas = 0, maxVagas = 100;
-    static int quantidadeCandidatosVagas = 0, maxCandidatosVagas = quantidadeCandidatos * quantidadeVagas;
+    static int quantidadeCandidatosVagas = 0, maxCandidatosVagas = maxCandidatos * maxVagas;
 
     static Candidato[] candidatos = new Candidato[maxCandidatos];
     static Vaga[] vagas = new Vaga[maxVagas];
@@ -26,8 +26,9 @@ public class RH {
             System.out.println("1 - Cadastrar Candidato");
             System.out.println("2 - Cadastrar Vaga");
             System.out.println("3 - Cadastrar Candidato x Vaga");
-            System.out.println("4 - Listar Candidatos");
-            System.out.println("5 - Listar Vagas");
+            System.out.println("4 - Listar Vagas por Tipo");
+            System.out.println("5 - Listar Candidatos");
+            System.out.println("6 - Listar Candidatos x Vagas");
             System.out.println("9 - Sair");
             System.out.print(">>> ");
             opcao = entrada.nextInt();
@@ -47,10 +48,13 @@ public class RH {
                     }
                 }
                 case 4 -> {
-                    listarCandidatos();
+                    listarVagasPorTipo();
                 }
                 case 5 -> {
-                    listarVagas();
+                    listarCandidatos();
+                }
+                case 6 -> {
+                    listarCandidatosVagas();
                 }
                 default -> {}
             }
@@ -159,21 +163,58 @@ public class RH {
         quantidadeCandidatosVagas++;
     }
 
-    static void listarCandidatos() {
-        System.out.println("\n\tListagem de Candidatos\n");
+    static void listarVagasPorTipo() {
+        System.out.println("\n\tListagem de Vagas de Estagio\n");
 
-        for (int i = 0; i < quantidadeCandidatos; i++) {
-            System.out.println(candidatos[i]);
+        for (int i = 0; i < quantidadeVagas; i++) {
+            if (vagas[i] instanceof Estagio) {
+                System.out.println(vagas[i]);
+            }
+        }
+        
+        System.out.println("\n\tListagem de Vagas de Contrato\n");
+
+        for (int i = 0; i < quantidadeVagas; i++) {
+            if (vagas[i] instanceof Contrato) {
+                System.out.println(vagas[i]);
+            }
         }
 
         System.out.println();
     }
 
-    static void listarVagas() {
-        System.out.println("\n\tListagem de Vagas\n");
+    static void listarCandidatos() {
+        int total = 0;
 
-        for (int i = 0; i < quantidadeVagas; i++) {
-            System.out.println(vagas[i]);
+        System.out.println("\n\tListagem de Candidatos Empregados\n");
+
+        for (int i = 0; i < quantidadeCandidatos; i++) {
+            if (candidatos[i] instanceof Empregado) {
+                System.out.println(candidatos[i]);
+                total++;
+            }
+        }
+        System.out.println("Total: " + total);
+        total = 0;
+
+        System.out.println("\n\tListagem de Candidatos Desempregados\n");
+
+        for (int i = 0; i < quantidadeCandidatos; i++) {
+            if (candidatos[i] instanceof Desempregado) {
+                System.out.println(candidatos[i]);
+                total++;
+            }
+        }
+        System.out.println("Total: " + total);
+
+        System.out.println();
+    }
+
+    static void listarCandidatosVagas() {
+        System.out.println("\n\tListagem de Candidatos x Vagas\n");
+
+        for (int i = 0; i < quantidadeCandidatosVagas; i++) {
+            System.out.println(candidatosVagas[i]);
         }
         
         System.out.println();
