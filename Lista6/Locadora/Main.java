@@ -281,4 +281,8 @@ public class Main {
 
         return clientes;
     }
+
+    /* public static void inserir(Midia midia) {
+        
+    } */
 }
