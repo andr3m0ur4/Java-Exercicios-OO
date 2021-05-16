@@ -17,6 +17,7 @@ public class RH {
 
     public static void main(String[] args) {
         lerCandidatosDoArquivo();
+        lerVagasDoArquivo();
 
         int opcao = 0;
 
@@ -39,7 +40,11 @@ public class RH {
                     cadastrarVaga();
                 }
                 case 3 -> {
-                    //cadastrarCandidatoVaga();
+                    try {
+                        cadastrarCandidatoVaga();
+                    } catch (IllegalArgumentException erro) {
+                        System.out.println(erro.getMessage());
+                    }
                 }
                 case 4 -> {
                     listarCandidatos();
@@ -125,6 +130,35 @@ public class RH {
         }
     }
 
+    static void cadastrarCandidatoVaga() {
+        System.out.println("Escolha um candidato:\n");
+        for (int i = 0; i < quantidadeCandidatos; i++) {
+            System.out.println("Cod: " + (i + 1) + " - " + candidatos[i]);
+        }
+        System.out.print(">>> Cod: ");
+        int codigo = entrada.nextInt() - 1;
+
+        if (codigo < 0 || codigo >= quantidadeCandidatos) {
+            throw new IllegalArgumentException("Codigo invalido!");
+        }
+        Candidato candidato = candidatos[codigo];
+        
+        System.out.println("Escolha uma vaga:\n");
+        for (int i = 0; i < quantidadeVagas; i++) {
+            System.out.println("Cod: " + (i + 1) + " - " + vagas[i]);
+        }
+        System.out.print(">>> Cod: ");
+        codigo = entrada.nextInt() - 1;
+
+        if (codigo < 0 || codigo >= quantidadeVagas) {
+            throw new IllegalArgumentException("Codigo invalido!");
+        }
+        Vaga vaga = vagas[codigo];
+
+        candidatosVagas[quantidadeCandidatosVagas] = new CandidatoVaga(candidato, vaga);
+        quantidadeCandidatosVagas++;
+    }
+
     static void listarCandidatos() {
         System.out.println("\n\tListagem de Candidatos\n");
 
@@ -163,6 +197,78 @@ public class RH {
                     );
 
                     quantidadeCandidatos++;
+                }
+            }
+
+            buffer.close();
+            reader.close();
+
+            reader = new FileReader("candidato-desempregado.txt");
+            buffer = new BufferedReader(reader);
+
+            while (buffer.ready()) {
+                String linha = buffer.readLine();
+
+                String[] campos = linha.split(";");
+
+                if (campos.length == 3) {
+                    candidatos[quantidadeCandidatos] = new Desempregado(
+                        campos[0],
+                        Integer.parseInt(campos[1]),
+                        Integer.parseInt(campos[2])
+                    );
+
+                    quantidadeCandidatos++;
+                }
+            }
+
+            buffer.close();
+            reader.close();
+        } catch (IOException erro) {
+            erro.printStackTrace();
+        }
+    }
+
+    static void lerVagasDoArquivo() {
+        try {
+            FileReader reader = new FileReader("vaga-estagio.txt");
+            BufferedReader buffer = new BufferedReader(reader);
+
+            while (buffer.ready()) {
+                String linha = buffer.readLine();
+
+                String[] campos = linha.split(";");
+
+                if (campos.length >= 3) {
+                    vagas[quantidadeVagas] = new Estagio(
+                        campos[0],
+                        Double.parseDouble(campos[1]),
+                        Integer.parseInt(campos[2])
+                    );
+
+                    quantidadeVagas++;
+                }
+            }
+
+            buffer.close();
+            reader.close();
+
+            reader = new FileReader("vaga-contrato.txt");
+            buffer = new BufferedReader(reader);
+
+            while (buffer.ready()) {
+                String linha = buffer.readLine();
+
+                String[] campos = linha.split(";");
+
+                if (campos.length == 3) {
+                    vagas[quantidadeVagas] = new Contrato(
+                        campos[0],
+                        Integer.parseInt(campos[1]),
+                        Boolean.parseBoolean(campos[2])
+                    );
+
+                    quantidadeVagas++;
                 }
             }
 

@@ -1,0 +1,3 @@
+Programador;500;5
+Desenvolvedor Web;750;6
+Desenvolvedor Front-End;200;4

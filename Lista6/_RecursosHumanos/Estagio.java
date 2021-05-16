@@ -7,6 +7,7 @@ public class Estagio extends Vaga {
 
     public Estagio(String descricao, double salario, int meses) {
         super(descricao, salario);
+        setMeses(meses);
     }
 
     public void setMeses(int meses) {
