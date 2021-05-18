@@ -23,11 +23,31 @@ public class Aluguel {
         return this.cliente;
     }
 
-    public void setMidia(Midia midia) {
+    public void alugarMidia(Midia midia) {
         if (midia != null) {
             midias[quantidadeMidias] = midia;
             quantidadeMidias++;
         }
+    }
+
+    public Midia devolverMidia(int codigo) {
+        Midia midia = null;
+
+        for (int i = 0; i < this.quantidadeMidias; i++) {
+            if (this.midias[i].getCodigo() == codigo) {
+                midia = this.midias[i];
+
+                for (int j = i; j < this.quantidadeMidias - 1; j++) {
+                    this.midias[j] = this.midias[j + 1];
+                }
+
+                this.midias[quantidadeMidias] = null;
+                this.quantidadeMidias--;
+                break;
+            }
+        }
+
+        return midia;
     }
 
     public Midia[] getMidia() {
