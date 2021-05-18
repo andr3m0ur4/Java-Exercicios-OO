@@ -1,9 +1,10 @@
+
 import java.util.Arrays;
 
 public class Teste {
     public static void main(String[] args) {
         
-        String midia = "";
+        /* String midia = "";
         String[] midias = { "a", "b", "c", "d", "e", null, null, null, null, null };
         int quantidade = 5;
 
@@ -24,7 +25,14 @@ public class Teste {
         //midias = novasMidias;
         System.out.println(Arrays.toString(midias));
         System.out.println(midia);
-        System.out.println(quantidade);
+        System.out.println(quantidade); */
+
+        Arquivo arquivo = new Arquivo();
+        String[][] dados = arquivo.lerArquivo("filmes.txt", 10, 7);
+        for (String linha[] : dados) {
+            System.out.println("[ " + Arrays.toString(linha) + " ]");
+
+        }
 
     }
 }

@@ -3,6 +3,7 @@ public class Aluguel {
     private Midia[] midias;
     private int quantidadeMidias;
     private double total;
+    private double totalPago;
 
     public Aluguel() {
         this.midias = new Midia[100];
@@ -26,6 +27,7 @@ public class Aluguel {
     public void alugarMidia(Midia midia) {
         if (midia != null) {
             midias[quantidadeMidias] = midia;
+            setTotal(midia.getValor());
             quantidadeMidias++;
         }
     }
@@ -62,5 +64,13 @@ public class Aluguel {
 
     public double getTotal() {
         return this.total;
+    }
+
+    public void pagarAluguel(Midia midia) {
+        this.totalPago += midia.getValor();
+    }
+
+    public double getTotalPago() {
+        return this.totalPago;
     }
 }
