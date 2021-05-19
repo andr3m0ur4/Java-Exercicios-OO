@@ -1,17 +1,15 @@
 public class Aluguel {
     private Cliente cliente;
-    private Midia[] midias;
-    private int quantidadeMidias;
-    private double total;
-    private double totalPago;
+    private Midia midia;
+    private boolean pago;
 
     public Aluguel() {
-        this.midias = new Midia[100];
+        
     }
 
-    public Aluguel(Cliente cliente) {
+    public Aluguel(Cliente cliente, Midia midia) {
         setCliente(cliente);
-        this.midias = new Midia[100];
+        setMidia(midia);
     }
 
     public void setCliente(Cliente cliente) {
@@ -24,15 +22,33 @@ public class Aluguel {
         return this.cliente;
     }
 
-    public void alugarMidia(Midia midia) {
+    public void setMidia(Midia midia) {
+        if (midia != null) {
+            this.midia = midia;
+        }
+    }
+
+    public Midia getMidia() {
+        return this.midia;
+    }
+
+    public void setPago(boolean pago) {
+        this.pago = pago;
+    }
+
+    public boolean isPago(boolean pago) {
+        return this.pago;
+    }
+
+    /* public void alugarMidia(Midia midia) {
         if (midia != null) {
             midias[quantidadeMidias] = midia;
             setTotal(midia.getValor());
             quantidadeMidias++;
         }
-    }
+    } */
 
-    public Midia devolverMidia(int codigo) {
+    /* public Midia devolverMidia(int codigo) {
         Midia midia = null;
 
         for (int i = 0; i < this.quantidadeMidias; i++) {
@@ -50,27 +66,7 @@ public class Aluguel {
         }
 
         return midia;
-    }
+    } */
 
-    public Midia[] getMidia() {
-        return this.midias;
-    }
-
-    public void setTotal(double valor) {
-        if (valor >= 0) {
-            this.total += valor;
-        }
-    }
-
-    public double getTotal() {
-        return this.total;
-    }
-
-    public void pagarAluguel(Midia midia) {
-        this.totalPago += midia.getValor();
-    }
-
-    public double getTotalPago() {
-        return this.totalPago;
-    }
+    
 }
