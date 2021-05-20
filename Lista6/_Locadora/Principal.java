@@ -56,16 +56,17 @@ public class Principal {
                     }
                 }
                 case 3 -> {
-
+                    System.out.println("Saldo total da locadora: R$ " + total + "\n");
                 }
-                case 7 -> {
-                    for (Aluguel aluguel : alugueis) {
-                        if (aluguel != null) {
-                            System.out.println(aluguel.getCliente());
-                            System.out.println(aluguel.getMidia());
-                            System.out.println("=========================");
-                        }
+                case 4 -> {
+                    try {
+                        verificarDebitoCliente();
+                    } catch (IllegalArgumentException erro) {
+                        System.out.println(erro.getMessage());
                     }
+                }
+                default -> {
+                    System.out.println("Codigo invalido!\n");
                 }
             }
         }
@@ -78,7 +79,7 @@ public class Principal {
         Cliente cliente = buscarCliente(entrada.nextInt());
         
         if (cliente == null) {
-            throw new IllegalArgumentException("Código inválido!");
+            throw new IllegalArgumentException("Código inválido!\n");
         }
 
         System.out.println("Qual mídia voce gostaria de alugar?");
@@ -99,7 +100,7 @@ public class Principal {
                 midia = alugarJogo();
             }
             default -> {
-                throw new IllegalArgumentException("Código inválido!");
+                throw new IllegalArgumentException("Código inválido!\n");
             }
         }
 
@@ -122,7 +123,7 @@ public class Principal {
         Filme filme = (Filme) buscarMidia(entrada.nextInt());
         
         if (filme == null) {
-            throw new IllegalArgumentException("Código inválido!");
+            throw new IllegalArgumentException("Código inválido!\n");
         }
 
         return filme;
@@ -135,7 +136,7 @@ public class Principal {
         Livro livro = (Livro) buscarMidia(entrada.nextInt());
         
         if (livro == null) {
-            throw new IllegalArgumentException("Código inválido!");
+            throw new IllegalArgumentException("Código inválido!\n");
         }
 
         return livro;
@@ -148,7 +149,7 @@ public class Principal {
         Jogo jogo = (Jogo) buscarMidia(entrada.nextInt());
         
         if (jogo == null) {
-            throw new IllegalArgumentException("Código inválido!");
+            throw new IllegalArgumentException("Código inválido!\n");
         }
 
         return jogo;
@@ -161,7 +162,7 @@ public class Principal {
         Cliente cliente = buscarCliente(entrada.nextInt());
         
         if (cliente == null) {
-            throw new IllegalArgumentException("Código inválido!");
+            throw new IllegalArgumentException("Código inválido!\n");
         }
 
         System.out.println("Qual midia voce gostaria de devolver?");
@@ -334,5 +335,28 @@ public class Principal {
         }
 
         return midia;
+    }
+
+    static void verificarDebitoCliente() {
+        System.out.println("Escolha um cliente:");
+        exibirClientes();
+        System.out.print(">>> ");
+        Cliente cliente = buscarCliente(entrada.nextInt());
+        
+        if (cliente == null) {
+            throw new IllegalArgumentException("Código inválido!\n");
+        }
+
+        double debito = 0;
+
+        for (int i = 0; i < quantidadeAluguel; i++) {
+            if (alugueis[i].getCliente() == cliente) {
+                if (!alugueis[i].isPago()) {
+                    debito += alugueis[i].getMidia().getValor();
+                }
+            }
+        }
+
+        System.out.println("Debito do cliente: R$ " + debito + "\n");
     }
 }
