@@ -17,12 +17,7 @@ public class Principal {
         cadastrarJogos();
         cadastrarClientes();
 
-        
-        //exibirClientes();
-        //System.out.print(buscarCliente(5));
         exibirMenu();
-
-        
     }
 
     static void exibirMenu() {
@@ -304,12 +299,6 @@ public class Principal {
             }
         }
     }
-
-    /* static Midia buscarMidiaAlugada(Cliente cliente) {
-        for (int i = 0; i < quantidadeAluguel; i++) {
-            if (alugueis[i].getCliente() == cliente) {
-
-    } */
 
     static Midia devolverMidia(int codigo, Cliente cliente) {
         Midia midia = null;
