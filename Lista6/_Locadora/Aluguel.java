@@ -32,11 +32,11 @@ public class Aluguel {
         return this.midia;
     }
 
-    public void setPago(boolean pago) {
-        this.pago = pago;
+    public void pagarMidia() {
+        this.pago = true;
     }
 
-    public boolean isPago(boolean pago) {
+    public boolean isPago() {
         return this.pago;
     }
 

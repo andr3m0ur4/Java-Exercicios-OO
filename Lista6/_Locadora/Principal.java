@@ -7,6 +7,8 @@ public class Principal {
     static int quantidadeMidias;
     static Cliente[] clientes = new Cliente[100];
     static int quantidadeClientes;
+    static Aluguel[] alugueis = new Aluguel[100 * 100];
+    static int quantidadeAluguel;
 
     public static void main(String[] args) {
         cadastrarFilmes();
@@ -14,8 +16,17 @@ public class Principal {
         cadastrarJogos();
         cadastrarClientes();
 
-        /* for (Cliente cliente : clientes) {
-            System.out.println(cliente);
+        
+        //exibirClientes();
+        //System.out.print(buscarCliente(5));
+        //exibirJogos();
+
+        /* for (Aluguel aluguel : alugueis) {
+            if (aluguel != null) {
+                System.out.println(aluguel.getCliente());
+                System.out.println(aluguel.getMidia());
+            }
+            System.out.println("=========================");
         } */
     }
 
@@ -36,14 +47,69 @@ public class Principal {
 
             switch (op) {
                 case 1 -> {
-
+                    alugarMidia();
                 }
             }
         }
     }
 
     static void alugarMidia() {
+        System.out.println("Escolha um cliente:");
+        exibirClientes();
+        System.out.print(">>> ");
+        Cliente cliente = buscarCliente(entrada.nextInt());
+        
+        if (cliente == null) {
+            throw new IllegalArgumentException("Código inválido!");
+        }
 
+        System.out.println("Qual mídia voce gostaria de alugar?");
+        System.out.println("1 - Filme");
+        System.out.println("2 - Livro");
+        System.out.println("3 - Jogo");
+        System.out.print(">>> ");
+        Midia midia = null;
+
+        switch (entrada.nextInt()) {
+            case 1 -> {
+                midia = alugarFilme();
+            }
+            case 2 -> {
+                System.out.println("Escolha um livro:");
+                exibirLivros();
+                System.out.print(">>> ");
+            }
+            case 3 -> {
+                System.out.println("Escolha um jogo:");
+                exibirJogos();
+                System.out.print(">>> ");
+            }
+            default -> {
+                throw new IllegalArgumentException("Código inválido!");
+            }
+        }
+
+        alugueis[quantidadeAluguel] = new Aluguel(cliente, midia);
+
+        System.out.print("Deseja realizar o pagamento agora? [S/N] ");
+        if (entrada.next().toUpperCase().charAt(0) == 'S') {
+            alugueis[quantidadeAluguel].pagarMidia();
+        }
+
+        quantidadeAluguel++;
+    }
+
+    static Filme alugarFilme() {
+        System.out.println("Escolha um filme:");
+        exibirFilmes();
+        System.out.print(">>> ");
+        Filme filme = (Filme) buscarMidia(entrada.nextInt());
+        
+        if (filme == null) {
+            throw new IllegalArgumentException("Código inválido!");
+        }
+
+        return filme;
     }
 
     static void cadastrarFilmes() {
@@ -112,5 +178,59 @@ public class Principal {
             );
             quantidadeClientes++;
         }
+    }
+
+    static void exibirClientes() {
+        for (int i = 0; i < quantidadeClientes; i++) {
+            System.out.println(clientes[i]);
+        }
+    }
+
+    static void exibirFilmes() {
+        for (int i = 0; i < quantidadeMidias; i++) {
+            if (midias[i] instanceof Filme) {
+                System.out.println(midias[i]);
+            }
+        }
+    }
+
+    static void exibirLivros() {
+        for (int i = 0; i < quantidadeMidias; i++) {
+            if (midias[i] instanceof Livro) {
+                System.out.println(midias[i]);
+            }
+        }
+    }
+
+    static void exibirJogos() {
+        for (int i = 0; i < quantidadeMidias; i++) {
+            if (midias[i] instanceof Jogo) {
+                System.out.println(midias[i]);
+            }
+        }
+    }
+
+    static Cliente buscarCliente(int codigo) {
+        Cliente cliente = null;
+
+        for (int i = 0; i < quantidadeClientes; i++) {
+            if (clientes[i].getCodigo() == codigo) {
+                cliente = clientes[i];
+            }
+        }
+
+        return cliente;
+    }
+
+    static Midia buscarMidia(int codigo) {
+        Midia midia = null;
+
+        for (int i = 0; i < quantidadeMidias; i++) {
+            if (midias[i].getCodigo() == codigo) {
+                midia = midias[i];
+            }
+        }
+
+        return midia;
     }
 }
