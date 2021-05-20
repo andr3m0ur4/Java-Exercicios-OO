@@ -9,6 +9,7 @@ public class Principal {
     static int quantidadeClientes;
     static Aluguel[] alugueis = new Aluguel[100 * 100];
     static int quantidadeAluguel;
+    static double total;
 
     public static void main(String[] args) {
         cadastrarFilmes();
@@ -19,15 +20,9 @@ public class Principal {
         
         //exibirClientes();
         //System.out.print(buscarCliente(5));
-        //exibirJogos();
+        exibirMenu();
 
-        /* for (Aluguel aluguel : alugueis) {
-            if (aluguel != null) {
-                System.out.println(aluguel.getCliente());
-                System.out.println(aluguel.getMidia());
-            }
-            System.out.println("=========================");
-        } */
+        
     }
 
     static void exibirMenu() {
@@ -47,7 +42,30 @@ public class Principal {
 
             switch (op) {
                 case 1 -> {
-                    alugarMidia();
+                    try {
+                        alugarMidia();
+                    } catch (IllegalArgumentException erro) {
+                        System.out.println(erro.getMessage());
+                    }
+                }
+                case 2 -> {
+                    try {
+                        devolverMidia();
+                    } catch (IllegalArgumentException erro) {
+                        System.out.println(erro.getMessage());
+                    }
+                }
+                case 3 -> {
+
+                }
+                case 7 -> {
+                    for (Aluguel aluguel : alugueis) {
+                        if (aluguel != null) {
+                            System.out.println(aluguel.getCliente());
+                            System.out.println(aluguel.getMidia());
+                            System.out.println("=========================");
+                        }
+                    }
                 }
             }
         }
@@ -75,14 +93,10 @@ public class Principal {
                 midia = alugarFilme();
             }
             case 2 -> {
-                System.out.println("Escolha um livro:");
-                exibirLivros();
-                System.out.print(">>> ");
+                midia = alugarLivro();
             }
             case 3 -> {
-                System.out.println("Escolha um jogo:");
-                exibirJogos();
-                System.out.print(">>> ");
+                midia = alugarJogo();
             }
             default -> {
                 throw new IllegalArgumentException("Código inválido!");
@@ -94,9 +108,11 @@ public class Principal {
         System.out.print("Deseja realizar o pagamento agora? [S/N] ");
         if (entrada.next().toUpperCase().charAt(0) == 'S') {
             alugueis[quantidadeAluguel].pagarMidia();
+            total += alugueis[quantidadeAluguel].getMidia().getValor();
         }
 
         quantidadeAluguel++;
+        System.out.println();
     }
 
     static Filme alugarFilme() {
@@ -110,6 +126,52 @@ public class Principal {
         }
 
         return filme;
+    }
+
+    static Livro alugarLivro() {
+        System.out.println("Escolha um livro:");
+        exibirLivros();
+        System.out.print(">>> ");
+        Livro livro = (Livro) buscarMidia(entrada.nextInt());
+        
+        if (livro == null) {
+            throw new IllegalArgumentException("Código inválido!");
+        }
+
+        return livro;
+    }
+
+    static Jogo alugarJogo() {
+        System.out.println("Escolha um jogo:");
+        exibirJogos();
+        System.out.print(">>> ");
+        Jogo jogo = (Jogo) buscarMidia(entrada.nextInt());
+        
+        if (jogo == null) {
+            throw new IllegalArgumentException("Código inválido!");
+        }
+
+        return jogo;
+    }
+
+    static void devolverMidia() {
+        System.out.println("Escolha um cliente:");
+        exibirClientes();
+        System.out.print(">>> ");
+        Cliente cliente = buscarCliente(entrada.nextInt());
+        
+        if (cliente == null) {
+            throw new IllegalArgumentException("Código inválido!");
+        }
+
+        System.out.println("Qual midia voce gostaria de devolver?");
+        listarMidiasAlugadas(cliente);
+        System.out.print(">>> ");
+        int codigo = entrada.nextInt();
+        Midia midia = devolverMidia(codigo, cliente);
+
+        System.out.println("Midia devolvida:");
+        System.out.println(midia);
     }
 
     static void cadastrarFilmes() {
@@ -228,6 +290,46 @@ public class Principal {
         for (int i = 0; i < quantidadeMidias; i++) {
             if (midias[i].getCodigo() == codigo) {
                 midia = midias[i];
+            }
+        }
+
+        return midia;
+    }
+
+    static void listarMidiasAlugadas(Cliente cliente) {
+        for (int i = 0; i < quantidadeAluguel; i++) {
+            if (alugueis[i].getCliente() == cliente) {
+                System.out.println(alugueis[i].getMidia());
+            }
+        }
+    }
+
+    /* static Midia buscarMidiaAlugada(Cliente cliente) {
+        for (int i = 0; i < quantidadeAluguel; i++) {
+            if (alugueis[i].getCliente() == cliente) {
+
+    } */
+
+    static Midia devolverMidia(int codigo, Cliente cliente) {
+        Midia midia = null;
+
+        for (int i = 0; i < quantidadeAluguel; i++) {
+            if (alugueis[i].getCliente() == cliente) {
+                if (alugueis[i].getMidia().getCodigo() == codigo) {
+                    midia = alugueis[i].getMidia();
+
+                    if (!alugueis[i].isPago()) {
+                        total += midia.getValor();
+                    }
+
+                    for (int j = i; j < quantidadeAluguel - 1; j++) {
+                        alugueis[j] = alugueis[j + 1];
+                    }
+
+                    alugueis[quantidadeAluguel] = null;
+                    quantidadeAluguel--;
+                    break;
+                }
             }
         }
 
