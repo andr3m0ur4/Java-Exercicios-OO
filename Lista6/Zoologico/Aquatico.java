@@ -20,6 +20,6 @@ public class Aquatico extends Animal {
 
     @Override
     public String toString() {
-        return super.toString() + "Pode respirar fora da água? " + (respiraForaDaAgua ? "Sim\n" : "Não\n");
+        return super.toString() + " - Pode respirar fora da água? " + (respiraForaDaAgua ? "Sim\n" : "Não\n");
     }
 }
